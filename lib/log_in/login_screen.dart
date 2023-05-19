@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project_flutter/log_in/components/heading_text.dart';
 
 class LoginScreen extends StatelessWidget {
 
@@ -16,6 +17,15 @@ class LoginScreen extends StatelessWidget {
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
+        body: Center(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                HeadText(),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
