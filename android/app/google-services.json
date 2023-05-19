@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "229135794564",
+    "project_id": "photo-sharing-clone-app-ceaac",
+    "storage_bucket": "photo-sharing-clone-app-ceaac.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:229135794564:android:060aa7738ff57b32deddd1",
+        "android_client_info": {
+          "package_name": "Martin.project_flutter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "229135794564-6dnr31ah3a5st337rtchcda8i56feth6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD2UMLk7l-FuzSei-6khNMG5lcSNbdnzpE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "229135794564-6dnr31ah3a5st337rtchcda8i56feth6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
