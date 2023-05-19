@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:project_flutter/log_in/components/heading_text.dart';
+import 'package:project_flutter/log_in/components/info.dart';
 
 class LoginScreen extends StatelessWidget {
 
@@ -22,6 +23,7 @@ class LoginScreen extends StatelessWidget {
             child: Column(
               children: [
                 HeadText(),
+                Credentials(),
               ],
             ),
           ),
