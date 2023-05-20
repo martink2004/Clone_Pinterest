@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:project_flutter/account_check/account_check.dart';
 import 'package:project_flutter/forget_password/forget_password.dart';
-import 'package:project_flutter/home_screen.dart';
+import 'package:project_flutter/home_screen/home_screen.dart';
+import 'package:project_flutter/sign_up_screen/sign_up.dart';
 import 'package:project_flutter/widgets/input_field.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import '../../widgets/button_login.dart';
@@ -82,6 +84,12 @@ class Credentials extends StatelessWidget {
                 }
               }
             ),
+          AccountCheck(
+              login: true,
+            press: (){
+              Navigator.pushReplacement(context,MaterialPageRoute(builder: (_)=>SignUpScreen()));
+            },
+             )
           ],
         ),
       );
