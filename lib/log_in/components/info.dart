@@ -6,7 +6,7 @@ import 'package:project_flutter/home_screen/home_screen.dart';
 import 'package:project_flutter/widgets/input_field.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import '../../sign_up/sign_up_screen.dart';
-import '../../widgets/button_login.dart';
+import '../../widgets/button_square.dart';
 
 class Credentials extends StatelessWidget {
 
@@ -65,7 +65,7 @@ class Credentials extends StatelessWidget {
               ),
             ],
           ),
-          ButtonLogin(
+          ButtonSquare(
               text: "Login",
               colors1: Colors.red,
               colors2: Colors.redAccent,

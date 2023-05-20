@@ -1,8 +1,14 @@
 import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:project_flutter/widgets/button_square.dart';
 import 'package:project_flutter/widgets/input_field.dart';
 import 'package:image_cropper/image_cropper.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 
 class Credentials extends StatefulWidget {
 
@@ -12,12 +18,15 @@ class Credentials extends StatefulWidget {
 
 class _CredentialsState  extends State<Credentials> {
 
+  final FirebaseAuth _auth= FirebaseAuth.instance;
+
   final TextEditingController  _fullNameController = TextEditingController(text: "");
   final TextEditingController  _emailTextController = TextEditingController(text: "");
   final TextEditingController  _passController = TextEditingController(text: "");
   final TextEditingController  _phoneController = TextEditingController(text: "");
 
   File? imageFile;
+  String? imageUrl;
 
   void _showImageDialog(){
     showDialog(
@@ -105,7 +114,7 @@ class _CredentialsState  extends State<Credentials> {
   @override
   Widget build(BuildContext context) {
     return  Padding(
-        padding: EdgeInsets.all(50.0),
+        padding: const EdgeInsets.all(50.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -150,6 +159,44 @@ class _CredentialsState  extends State<Credentials> {
             icon: Icons.phone,
             obscureText: false,
             textEditingController: _phoneController,
+          ),
+          const SizedBox(height: 15.0,),
+          ButtonSquare(
+              text: "Create Account",
+              colors1: Colors.red,
+              colors2: Colors.redAccent,
+
+              press: () async{
+               if(imageFile == null) {
+                 Fluttertoast.showToast(msg: "Please select an Image");
+                 return;
+               }
+               try
+               {
+                final ref= FirebaseStorage.instance.ref().child('userImages').child(DateTime.now().toString() + '.jpg');
+                await ref.putFile(imageFile!);
+                imageUrl=await ref.getDownloadURL();
+                await _auth.createUserWithEmailAndPassword(
+                    email: _emailTextController.text.trim().toLowerCase(),
+                    password: _passController.text.trim(),
+                );
+                final User? user=_auth.currentUser;
+                final _uid=user!.uid;
+                FirebaseFirestore.instance.collection('users').doc(_uid).set({
+                  'id':_uid,
+                  'userImage':imageUrl,
+                  'name': _fullNameController.text,
+                   'email': _emailTextController.text,
+                  'phoneNumber': _phoneController.text,
+                  'createAt': Timestamp.now(),
+                });
+                Navigator.canPop(context) ? Navigator.pop(context):null;
+               }
+               catch(error){
+                 Fluttertoast.showToast(msg: error.toString());
+               }
+               //create Homepage
+              },
           ),
         ],
       ),
