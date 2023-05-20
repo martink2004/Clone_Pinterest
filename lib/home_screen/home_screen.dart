@@ -14,14 +14,16 @@ class HomeScreen extends StatefulWidget {
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
-
-
 }
 
 
 
 
  class _HomeScreenState extends State<HomeScreen>{
+
+   String changeTitle="Grid View";
+   bool checkView=false;
+
 
    File? imageFile;
    String? imageUrl;
@@ -155,7 +157,8 @@ class HomeScreen extends StatefulWidget {
      read_userInfo();
   }
 
-  Widget listViewWidget(String docId,String img,String userImg,String name,DateTime date, String userId,int downloads){
+  Widget listViewWidget(String docId,String img,String userImg,String name,DateTime date, String userId,int downloads)
+  {
       return Padding(
         padding: const EdgeInsets.all(8.0),
         child: Card(
@@ -218,6 +221,36 @@ class HomeScreen extends StatefulWidget {
       );
   }
 
+   Widget gridViewWidget(String docId,String img,String userImg,String name,DateTime date, String userId,int downloads){
+     return GridView.count(
+       primary: false,
+       padding: const EdgeInsets.all(6.0),
+       crossAxisSpacing: 1,
+       crossAxisCount: 1,
+       children: [
+         Container(
+           decoration: BoxDecoration(
+               gradient: LinearGradient(
+                 colors: [Colors.pink,Colors.deepOrange.shade300],
+                 begin: Alignment.centerLeft,
+                 end: Alignment.centerRight,
+                 stops: const[0.2,0.9],
+               ),
+           ),
+           padding: const EdgeInsets.all(10.0),
+           child: GestureDetector(
+             onTap: (){
+               //
+             },
+             child: Center(
+               child: Image.network(img, fit: BoxFit.fill,),
+             ),
+           ),
+         ),
+       ],
+     );
+   }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -269,6 +302,22 @@ class HomeScreen extends StatefulWidget {
               ),
             ),
           ),
+          title:GestureDetector(
+            onTap: (){
+              setState(() {
+                changeTitle="List View";
+                checkView=true;
+              });
+            },
+            onDoubleTap: () {
+              setState(() {
+                changeTitle="Grid View";
+                checkView=false;
+              });
+            },
+            child: Text(changeTitle),
+          ) ,
+          centerTitle: true,
           leading: GestureDetector(
             onTap: (){
               FirebaseAuth.instance.signOut();
@@ -279,6 +328,69 @@ class HomeScreen extends StatefulWidget {
             ),
           ),
         ) ,
+        body: StreamBuilder<QuerySnapshot>(
+          stream: FirebaseFirestore.instance.collection('wallpaper').orderBy("CreateAt",descending: false).snapshots(),
+          builder: (context,AsyncSnapshot snapshot)
+          {
+            if(snapshot.connectionState==ConnectionState.waiting){
+              return const Center(child: CircularProgressIndicator(),);
+            }
+            else if(snapshot.connectionState == ConnectionState.active){
+              if(snapshot.data!.docs.isNotEmpty){
+                if(checkView=true){
+                  return ListView.builder(
+                      itemCount: snapshot.data!.docs.lenght,
+                    itemBuilder: (BuildContext context, int index){
+                        return listViewWidget(
+                          snapshot.data!.docs[index].id,
+                          snapshot.data!.docs[index]['Image'],
+                          snapshot.data!.docs[index]['User Image'],
+                          snapshot.data!.docs[index]['name'],
+                          snapshot.data!.docs[index]['CreatedAt'].toDate(),
+                          snapshot.data!.docs[index]['id'],
+                          snapshot.data!.docs[index]['downloads'],
+
+                        );
+                    }
+                  );
+                }
+                else{
+                  return GridView.builder(
+                    itemCount: snapshot.data!.docs.lenght,
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount (
+                      crossAxisCount:3
+                    ),
+                      itemBuilder: (BuildContext context, int index){
+                        return gridViewWidget(
+                          snapshot.data!.docs[index].id,
+                          snapshot.data!.docs[index]['Image'],
+                          snapshot.data!.docs[index]['User Image'],
+                          snapshot.data!.docs[index]['name'],
+                          snapshot.data!.docs[index]['CreatedAt'].toDate(),
+                          snapshot.data!.docs[index]['id'],
+                          snapshot.data!.docs[index]['downloads'],
+
+                        );
+                      }
+                  );
+                }
+              }
+              else{
+                return const Center(
+                  child: Text('There is no tasks',
+                  style: TextStyle(fontSize: 20,),
+                  ),
+                );
+              }
+            }
+            return const Center(
+              child: Text(
+                'Somethinb went wrong',
+                style: TextStyle(fontWeight: FontWeight.bold,fontSize: 30),
+              ),
+            );
+          },
+        ),
       ),
     );
   }
