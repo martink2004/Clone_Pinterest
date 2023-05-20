@@ -1,8 +1,18 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.project_flutter">
+
+    <uses-permission android:name="android.permissin.WRITE_EXTERNAL_STORAGE"/>
+
     <application
         android:label="project_flutter"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+
+        <activity
+            android:name="com.yalantis.ucrop.UCropActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
