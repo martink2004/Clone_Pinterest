@@ -1,16 +1,19 @@
-# project_flutter
+За да разгърнете своята Flutter приложение чрез Android Studio, можете да следвате следните стъпки:
 
-A new Flutter project.
+Отворете вашия Flutter проект в Android Studio.
 
-## Getting Started
+Уверете се, че вашият Flutter проект е конфигуриран правилно и всички зависимости са инсталирани.
 
-This project is a starting point for a Flutter application.
+Свържете вашия Android устройство с компютъра чрез USB кабел или създайте виртуално устройство за Android (AVD). 
 
-A few resources to get you started if this is your first Flutter project:
+Отворете "Terminal" в Android Studio, като кликнете върху иконата на терминала в долния десен ъгъл на прозореца.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+В терминала изпълнете командата flutter build apk за създаване на APK файл за вашето приложение. Ако искате да създадете Bundle файл, използвайте командата flutter build appbundle.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+След като се генерира APK или Bundle файлът, ще го намерите в папката "build" във вашия проект.
+
+За да инсталирате приложението на своето Android устройство, свържете го към компютъра чрез USB кабел и изпълнете командата flutter install в терминала.
+
+Приложението ще бъде инсталирано на вашия Android устройство и ще можете да го използвате.
+
+Това са основните стъпки за конфигурация на приложението в Android Studio. Можете да изследвате допълнителни опции за конфигурация на приложението, като например подписване на приложението и качване в Google Play Store, в зависимост от вашите конкретни изисквания. 
