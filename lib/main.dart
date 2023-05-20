@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
            home: Scaffold(
              body: Center(
                child:Center(
-                child: Text("Welcome to PhotoSharing Clone App"),
+                child: Text("Welcome to Pinterest Clone App"),
                    ),
                 ),
               ),
@@ -44,7 +44,7 @@ class MyApp extends StatelessWidget {
        }
        return  MaterialApp(
          debugShowCheckedModeBanner: false,
-         title: "Flutter PhotoSharing Clone App",
+         title: "Flutter Pinterest Clone App",
          home: LoginScreen(),
        );
       }

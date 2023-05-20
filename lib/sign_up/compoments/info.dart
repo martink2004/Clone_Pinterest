@@ -3,6 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:project_flutter/account_check/account_check.dart';
+import 'package:project_flutter/home_screen/home_screen.dart';
+import 'package:project_flutter/log_in/login_screen.dart';
 import 'package:project_flutter/widgets/button_square.dart';
 import 'package:project_flutter/widgets/input_field.dart';
 import 'package:image_cropper/image_cropper.dart';
@@ -195,8 +198,13 @@ class _CredentialsState  extends State<Credentials> {
                catch(error){
                  Fluttertoast.showToast(msg: error.toString());
                }
-               //create Homepage
-              },
+               Navigator.pushReplacement(context, MaterialPageRoute(builder: (_)=>HomeScreen()));
+              }
+          ),
+          AccountCheck(
+              login: false, press: (){
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (_)=>LoginScreen()));
+          }
           ),
         ],
       ),
