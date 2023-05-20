@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:project_flutter/account_check/account_check.dart';
 import 'package:project_flutter/forget_password/forget_password.dart';
 import 'package:project_flutter/home_screen/home_screen.dart';
-import 'package:project_flutter/sign_up_screen/sign_up.dart';
 import 'package:project_flutter/widgets/input_field.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import '../../sign_up/sign_up_screen.dart';
 import '../../widgets/button_login.dart';
 
 class Credentials extends StatelessWidget {
