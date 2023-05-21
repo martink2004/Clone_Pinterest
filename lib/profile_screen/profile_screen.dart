@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:project_flutter/home_screen/home_screen.dart';
 import 'package:project_flutter/log_in/login_screen.dart';
 
@@ -21,6 +23,8 @@ class _ProfileScreeenState extends State<ProfileScreeen> {
   String? image='';
   String? phoneNo='';
   File? imageXFile;
+  String? userNameInput='';
+
 
   Future _getDataFromDatabase() async{
     await FirebaseFirestore.instance.collection("users")
@@ -45,6 +49,136 @@ class _ProfileScreeenState extends State<ProfileScreeen> {
     // TODO: implement initState
     super.initState();
     _getDataFromDatabase();
+  }
+  void _showImageDialog(){
+    showDialog(
+        context: context,
+        builder: (context){
+          return AlertDialog(
+            title: const Text( "Please choose an option"),
+            content:  Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                InkWell(
+                  onTap: (){
+                    _getFromCamera();
+                  },
+                  child:  const Row(
+                    children: [
+                      Padding(
+                          padding: EdgeInsets.all(4.0),
+                          child: Icon(
+                            Icons.camera,
+                            color: Colors.red,
+                          )
+                      ),
+                      Text(
+                        "Camera",
+                        style: TextStyle(color: Colors.red),
+                      ),
+                    ],
+                  ),
+                ),
+                InkWell(
+                  onTap:(){
+                    _getFromGallery();
+                  },
+                  child:  const Row(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.all(4.0),
+                        child: Icon(
+                          Icons.image,
+                          color: Colors.red,
+                        ),
+                      ),
+                      Text(
+                        "Galery",
+                        style: TextStyle(color: Colors.red),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          );
+        }
+    );
+  }
+
+  void _getFromCamera() async
+  {
+    XFile? pickedFile = await ImagePicker().pickImage(source: ImageSource.camera);
+    _cropImage(pickedFile!.path);
+    Navigator.pop(context);
+  }
+
+  void _getFromGallery() async
+  {
+    XFile? pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+    _cropImage(pickedFile!.path);
+    Navigator.pop(context);
+  }
+
+  void _cropImage(filePath) async
+  {
+    CroppedFile? croppedImage = await ImageCropper().cropImage(
+        sourcePath:filePath, maxHeight: 1080, maxWidth:1080);
+
+    if(croppedImage!= null){
+      setState(() {
+        imageXFile=File(croppedImage.path);
+      });
+    }
+  }
+
+  Future _updateUserName() async{
+    await FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).update({
+      'name': userNameInput,
+    });
+
+  }
+
+  _displayTextInputDialog(BuildContext context)async{
+    return showDialog(
+      context: context,
+      builder: (context){
+        return AlertDialog(
+          title: const Text('Update Your Name Here'),
+          content: TextField(
+            onChanged: (value){
+              setState(() {
+                userNameInput=value;
+              });
+            },
+            decoration: const InputDecoration(hintText: "Type here"),
+          ),
+          actions: [
+            ElevatedButton(
+              child: const Text('Cancel',style: TextStyle(color: Colors.white),),
+              onPressed: (){
+                setState(() {
+                  Navigator.pop(context);
+                });
+              },
+              style: ElevatedButton.styleFrom(
+                primary: Colors.red,
+              ),
+            ),
+            ElevatedButton(
+              child: const Text('Save',style: TextStyle(color: Colors.white),),
+              onPressed: (){
+                _updateUserName();
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (_)=> HomeScreen()));
+              },
+              style: ElevatedButton.styleFrom(
+                primary: Colors.amber,
+              ),
+            ),
+          ],
+        );
+      }
+    );
   }
 
   @override
@@ -93,7 +227,7 @@ class _ProfileScreeenState extends State<ProfileScreeen> {
           children: [
             GestureDetector(
               onTap: (){
-                //showimageDialog
+                _showImageDialog();
               },
               child:  CircleAvatar(
                 backgroundColor: Colors.amberAccent,
@@ -127,7 +261,7 @@ class _ProfileScreeenState extends State<ProfileScreeen> {
                 ),
                 IconButton(
                     onPressed: (){
-                      //displayTextinput
+                      _displayTextInputDialog(context);
                     },
                   icon: const Icon(Icons.edit),
                 ),
