@@ -171,6 +171,7 @@ class _ProfileScreeenState extends State<ProfileScreeen> {
               child: const Text('Save',style: TextStyle(color: Colors.white),),
               onPressed: (){
                 _updateUserName();
+                updateProfileNameOnUserExistingPosts();
                 Navigator.pushReplacement(context, MaterialPageRoute(builder: (_)=> HomeScreen()));
               },
               style: ElevatedButton.styleFrom(
@@ -218,6 +219,25 @@ class _ProfileScreeenState extends State<ProfileScreeen> {
 
          });
        }
+      }
+    });
+  }
+
+  updateProfileNameOnUserExistingPosts() async{
+    await FirebaseFirestore.instance.collection('wallpaper')
+        .where("id",isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+        .get()
+        .then((snapshot){
+      for(int index=0;index<snapshot.docs.length; index++){
+        String userProfileNameInPost= snapshot.docs[index]['name'];
+
+        if(userProfileNameInPost != userNameInput){
+          FirebaseFirestore.instance.collection('wallpaper').doc(snapshot.docs[index].id)
+              .update({
+            'name':userNameInput,
+
+          });
+        }
       }
     });
   }
