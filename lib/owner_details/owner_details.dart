@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -147,6 +148,37 @@ class _OwnerDetailsState extends State<OwnerDetails>{
                         print(error);
                       }
                     }
+                  ),
+                ),
+                FirebaseAuth.instance.currentUser!.uid==widget.userId
+                ?
+                    Padding(
+                      padding: const EdgeInsets.only(left:8.0,right: 8.0),
+                      child: ButtonSquare(
+                        text: "Delete",
+                        colors1: Colors.green,
+                        colors2: Colors.lightGreen,
+
+                        press: () async{
+                          FirebaseFirestore.instance.collection('wallpaper').doc(widget.docId).delete().then((value){
+                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (_)=> HomeScreen()));
+                          });
+                        },
+                      ),
+                    )
+                    :
+                    Container(),
+                Padding(
+                  padding: const EdgeInsets.only(left:8.0,right: 8.0),
+                  child: ButtonSquare(
+                    text: "Go back",
+                    colors1: Colors.green,
+                    colors2: Colors.lightGreen,
+
+                    press: () async{
+
+                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (_)=> HomeScreen()));
+                      }
                   ),
                 ),
               ],
