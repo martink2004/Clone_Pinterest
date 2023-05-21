@@ -7,7 +7,7 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:project_flutter/home_screen/home_screen.dart';
 import 'package:project_flutter/log_in/login_screen.dart';
-
+import 'package:firebase_storage/firebase_storage.dart' as fStorage;
 class ProfileScreeen  extends StatefulWidget {
 
 
@@ -24,6 +24,7 @@ class _ProfileScreeenState extends State<ProfileScreeen> {
   String? phoneNo='';
   File? imageXFile;
   String? userNameInput='';
+  String? userImageUrl;
 
 
   Future _getDataFromDatabase() async{
@@ -128,6 +129,7 @@ class _ProfileScreeenState extends State<ProfileScreeen> {
     if(croppedImage!= null){
       setState(() {
         imageXFile=File(croppedImage.path);
+        _updateImageInFirestore();
       });
     }
   }
@@ -181,6 +183,23 @@ class _ProfileScreeenState extends State<ProfileScreeen> {
     );
   }
 
+  void _updateImageInFirestore() async {
+    String fileName = DateTime
+        .now()
+        .microsecondsSinceEpoch
+        .toString();
+    fStorage.Reference reference=fStorage.FirebaseStorage.instance.ref()
+        .child("userImages").child(fileName);
+    fStorage.UploadTask uploadTask=reference.putFile(File(imageXFile!.path));
+    fStorage.TaskSnapshot taskSnapshot=await uploadTask.whenComplete(() => {});
+    await taskSnapshot.ref.getDownloadURL().then((url) async{
+      userImageUrl=url;
+    });
+    await FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).update(
+      {
+         'userImage':userImageUrl,
+      });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
