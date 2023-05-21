@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:project_flutter/home_screen/home_screen.dart';
+import 'package:project_flutter/log_in/login_screen.dart';
 
 class ProfileScreeen  extends StatefulWidget {
 
@@ -139,6 +140,25 @@ class _ProfileScreeenState extends State<ProfileScreeen> {
             fontSize:20.0,
               color: Colors.white,
             ),
+            ),
+            const SizedBox(height: 20.0,),
+            Text(
+              "PhoneNymber: ${phoneNo!}",
+              style: const TextStyle(
+                fontSize:20.0,
+                color: Colors.white,
+              ),
+            ),
+            const SizedBox(height: 10.0,),
+            ElevatedButton(
+                onPressed: (){
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (_)=>LoginScreen()));
+                },
+            child: const Text("Logout"),
+              style: ElevatedButton.styleFrom(
+                primary: Colors.amber,
+                padding: const EdgeInsets.symmetric(horizontal: 30.0,vertical: 10),
+              ),
             ),
           ],
         ),
