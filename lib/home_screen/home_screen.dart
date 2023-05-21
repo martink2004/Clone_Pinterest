@@ -9,6 +9,7 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:project_flutter/log_in/login_screen.dart';
+import 'package:project_flutter/owner_details/owner_details.dart';
 
 class HomeScreen extends StatefulWidget {
 
@@ -178,7 +179,15 @@ class HomeScreen extends StatefulWidget {
               children: [
                 GestureDetector(
                   onTap: (){
-                    //create ownerdetails
+                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (_)=> OwnerDetails(
+                      img: img,
+                      userImg: userImg,
+                      name: name,
+                        date: date,
+                      docId: docId,
+                      userId  : userId,
+                      downloads: downloads,
+                    )));
                   },
                   child: Image.network(
                     img,
@@ -240,7 +249,15 @@ class HomeScreen extends StatefulWidget {
            padding: const EdgeInsets.all(10.0),
            child: GestureDetector(
              onTap: (){
-               //
+               Navigator.pushReplacement(context, MaterialPageRoute(builder: (_)=> OwnerDetails(
+                 img: img,
+                 userImg: userImg,
+                 name: name,
+                 date: date,
+                 docId: docId,
+                 userId  : userId,
+                 downloads: downloads,
+               )));
              },
              child: Center(
                child: Image.network(img, fit: BoxFit.fill,),
