@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:project_flutter/home_screen/home_screen.dart';
+import 'package:project_flutter/search_post/user.dart';
+import 'package:project_flutter/search_post/users_design_widget.dart';
 
 class SearchPost extends StatefulWidget {
 
@@ -62,6 +64,27 @@ class _SearchPostState extends State<SearchPost> {
               ),
             ),
           ),
+        ),
+        body: FutureBuilder<QuerySnapshot>(
+          future: postDocumentstList,
+          builder: (context,AsyncSnapshot snapshot)
+          {
+              return snapshot.hasData
+                  ?
+                  ListView.builder(
+                      itemCount: snapshot.data!.docs.lenght,
+                  itemBuilder:(context,index){
+                        Users model=Users.fromJson(snapshot.data!.docs[index].data()! as Map<String,dynamic>
+                        );
+                        return UsersDesignWidget(
+                          model:model,
+                          context: context,
+                        );
+                    }
+                  )
+                  :
+                  const Center(child: Text("No Record Exists"),);
+          },
         ),
       ),
     );
