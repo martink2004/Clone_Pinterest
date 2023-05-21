@@ -198,8 +198,31 @@ class _ProfileScreeenState extends State<ProfileScreeen> {
     await FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid).update(
       {
          'userImage':userImageUrl,
-      });
+      }).whenComplete((){
+      updateProfileImageOnUserExistingPosts();
+    });
   }
+
+  updateProfileImageOnUserExistingPosts() async{
+    await FirebaseFirestore.instance.collection('wallpaper')
+    .where("id",isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+    .get()
+    .then((snapshot){
+      for(int index=0;index<snapshot.docs.length; index++){
+       String userProfileImageInPost= snapshot.docs[index]['userImage'];
+
+       if(userProfileImageInPost != userImageUrl){
+         FirebaseFirestore.instance.collection('wallpaper').doc(snapshot.docs[index].id)
+         .update({
+           'userImage':userImageUrl,
+
+         });
+       }
+      }
+    });
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
