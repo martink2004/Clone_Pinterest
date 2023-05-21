@@ -10,6 +10,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:project_flutter/log_in/login_screen.dart';
 import 'package:project_flutter/owner_details/owner_details.dart';
+import 'package:project_flutter/profile_screen/profile_screen.dart';
+import 'package:project_flutter/search_post/search_post.dart';
 
 class HomeScreen extends StatefulWidget {
 
@@ -344,8 +346,22 @@ class HomeScreen extends StatefulWidget {
               Icons.login_outlined
             ),
           ),
+          actions: <Widget>[
+            IconButton(
+              onPressed: (){
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (_)=>SearchPost(),),);
+              },
+              icon:const Icon(Icons.person_search),
+            ),
+            IconButton(
+              onPressed: (){
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (_)=>ProfileScreeen(),),);
+              },
+              icon:const Icon(Icons.person),
+            ),
+          ],
         ) ,
-        
+
         body: StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance.collection('wallpaper').orderBy("CreateAt",descending: false).snapshots(),
           builder: (context,AsyncSnapshot snapshot)
