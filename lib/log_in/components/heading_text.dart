@@ -14,11 +14,11 @@ class HeadText extends StatelessWidget {
           SizedBox(height: size.height *0.05),
           const Center(
             child: Text("PhotoSharing",style: TextStyle(
-              fontSize:55,
+              fontSize:70,
               color: Colors.white,
               fontWeight: FontWeight.bold,
               fontFamily: "Signatra",
-            )
+            ),
             ),
           ),
            const Center(
